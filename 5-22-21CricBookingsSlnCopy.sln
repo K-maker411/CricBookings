@@ -5,11 +5,6 @@ VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CricBookingsWebsite", "CricBookingsWebsite\CricBookingsWebsite.csproj", "{FF45E12F-BB85-4F8C-8D8D-3101138CDAF4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql Scripts", "Sql Scripts", "{5B9752ED-FB71-4EE7-A199-E95119D2D508}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\Documents\CricBookings_script.sql = ..\..\..\Documents\CricBookings_script.sql
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
