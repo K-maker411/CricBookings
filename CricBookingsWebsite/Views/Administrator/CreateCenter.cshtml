@@ -1,0 +1,111 @@
+﻿@model CricBookingsWebsite.Models.ViewModels.CreateCenterViewModel
+
+@{
+    ViewData["Title"] = "Create Center";
+}
+
+<h1>Create New Center</h1>
+
+<form asp-controller="Administrator" asp-action="CreateCenter" role="form">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-4">
+                <label asp-for="StateName" class="col-form-label">State Name*</label>
+                <select asp-for="StateName" class="form-control" asp-items="@ViewBag.ListOfStates"> <option>--Select State--</option></select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-4">
+                <label asp-for="CityName" class="col-form-label">City Name*</label>
+                <select class="form-control" id="CityId" name="CityName" asp-for="CityName" asp-items="@(new SelectList(string.Empty, "CityName"))"><option>--Select City--</option></select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-4">
+                <label asp-for="Name" class="col-form-label">Center Name*</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-4">
+                <label asp-for="Address1" class="col-form-label">Address 1*</label>
+                <input asp-for="Address1" class="form-control" />
+                <span asp-validation-for="Address1" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-4">
+                <label asp-for="Address2" class="col-form-label">Address 2</label>
+                <input asp-for="Address2" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-4">
+                <label asp-for="Zip" class="col-form-label">Zipcode*</label>
+                <input asp-for="Zip" class="form-control" />
+                <span asp-validation-for="Zip" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-4">
+                <input type="submit" value="Create Center" class="btn btn-block btn-primary" />
+            </div>
+        </div>
+    </div>
+    <div asp-validation-summary="ModelOnly"></div>
+</form>
+
+
+
+
+@*<script src="/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+    });
+</script>*@
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+@*<script src="lib/jquery/dist/jquery.js"></script>*@
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var items = "<option value='0'>--Select--</options>";
+        $('#CityId').html(items);
+        $('#StateName').change(function () {
+            var url = '@Url.Content("~/")' + 'Administrator/GetCity';
+            var ddlsource = '#StateName';
+            $.getJSON(url, { StateName: $(ddlsource).val() }, function (data) {
+                var items = '';
+                $("#CityId").empty();
+                console.log(data);
+                $.each(data, function (i, city) {
+                    console.log(city);
+                    //items += "<option value='" + city.value + "'>" + city.text + "</options>";
+                    items += "<option value='" + city + "'>" + city + "</options>";
+                });
+                $('#CityId').html(items);
+            });
+        });
+
+        
+    });
+</script>
+}

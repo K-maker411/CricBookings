@@ -1,0 +1,3 @@
+﻿The database connection string is:
+Working String (use in package manager console): Scaffold-DbContext "Server=(localdb)\MSSQLLocalDB;Database=CricBookings;Trusted_Connection=True;Integrated Security=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
+(localdb)\MSSQLLocalDB

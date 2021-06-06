@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Center>
+
+@{
+    ViewBag.Title = "All Centers";
+}
+
+<h1 title="">All Centers</h1>
+
+@if (Model.Any())
+{
+    <a class="btn btn-primary mb-3" style="width:auto" asp-action="CreateCenter" asp-controller="Administrator">Add New Center</a>
+
+    foreach (var center in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                Center ID: @center.Id
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Center Name: @center.Name</h5>
+                <h5 class="card-title">City: @center.City.Name</h5>
+                <h5 class="card-title">State: @center.City.State.Abbr</h5>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary" asp-action="EditCenter" asp-controller="Administrator" asp-route-id="@center.Id">Edit</a>
+                <a class="btn btn-primary" asp-action="CreateLanes" asp-controller="Administrator" asp-route-id="@center.Id">Create Lanes</a>
+                <a class="btn btn-primary" asp-action="ListLanes" asp-controller="Administrator" asp-route-id="@center.Id">List/Edit Lanes</a>
+                <a class="btn btn-info" asp-action="CreateSchedule" asp-controller="Administrator" asp-route-id="@center.Id">Add Schedule</a>
+                <a class="btn btn-info" asp-action="ListSchedules" asp-controller="Administrator" asp-route-id="@center.Id">List Schedules</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No centers created yet
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                Use the button below to create a center
+            </h5>
+            <a class="btn btn-primary" style="width:auto" asp-controller="Administrator" asp-action="CreateCenter">
+                Create Center
+            </a>
+        </div>
+    </div>
+}

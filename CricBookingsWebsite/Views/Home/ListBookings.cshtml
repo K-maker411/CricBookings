@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Booking>
+
+@{
+    ViewBag.Title = "Current Bookings";
+}
+
+<h1 title="">Current Bookings</h1>
+
+@if (Model.Any())
+{
+    <a class="btn btn-primary mb-3" style="width:auto" asp-action="BookTimeSlot" asp-controller="Home">Book Timeslot</a>
+
+    foreach (var booking in Model)
+    {
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>Date: @booking.TimeSlot.SlotDateTime.ToShortDateString()</h5>
+                <h5>Time: @string.Format("{0:hh:mm tt}", booking.TimeSlot.SlotDateTime)</h5>
+            </div>
+        </div>
+    }
+}
+
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No bookings made yet
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                Use the button below to book a timeslot
+            </h5>
+            <a class="btn btn-primary mb-3" style="width:auto" asp-action="BookTimeSlot" asp-controller="Home">
+                Book Timeslot
+            </a>
+        </div>
+    </div>
+}

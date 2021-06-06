@@ -1,0 +1,220 @@
+﻿@model CricBookingsWebsite.Models.ViewModels.BookTimeSlotViewModel
+@{
+    ViewBag.Title = "Book Timing";
+
+    // TODO - Use a more appealing date picker (some sort of widget, will do later)
+}
+<h1>Select your center</h1>
+
+<form asp-controller="Administrator" asp-action="CreateCenter" role="form">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-4">
+                <label asp-for="stateName" class="col-form-label">State Name</label>
+                <select asp-for="stateName" class="form-control" asp-items="@ViewBag.ListOfStates"> <option>--Select State--</option></select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-4">
+                <label asp-for="cityName" class="col-form-label">City Name</label>
+                <select class="form-control" id="cityId" name="cityName" asp-for="cityName" asp-items="@(new SelectList(string.Empty, "cityName"))"><option>--Select City--</option></select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-4">
+                <label asp-for="centerName" class="col-form-label">Center Name</label>
+                <select class="form-control" id="centerId" name="centerName" asp-for="centerName" asp-items="@(new SelectList(string.Empty, "centerName"))"><option>--Select Center--</option></select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="chosenDate" class="control-label">Choose a date and time: </label>
+        <input asp-for="chosenDate" id="datepicker" type="text" class="form-control" value="Choose a date" />
+        <span asp-validation-for="chosenDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Available Time Slots:</label>
+        <table id="table"></table>
+        <input type="button" value="Submit" id="submitTimeSlot" />
+    </div>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+
+
+
+    <script>
+        function displayRadioValue() {
+            var ele = document.getElementsByName('slots');
+            for (i = 0; i < ele.length; i++) {
+                if (ele[i].checked) {
+                    alert(ele[i].value);
+                }
+            }
+        }
+    </script>    
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+        var items = "<option value='0'>--Select--</options>";
+        $('#cityId').html(items);
+        $('#stateName').change(function () {
+            var url = '@Url.Content("~/")' + 'Home/GetCity';
+            var ddlsource = '#stateName';
+            $.getJSON(url, { StateName: $(ddlsource).val() }, function (data) {
+                var items = '';
+                $("#cityId").empty();
+                console.log(data);
+                $.each(data, function (i, city) {
+                    console.log(city);
+                    //items += "<option value='" + city.value + "'>" + city.text + "</options>";
+                    items += "<option value='" + city.Id + "'>" + city.Name + "</options>";
+                });
+                $('#cityId').html(items);
+            });
+        });
+
+        $('#centerId').html(items);
+        $('#cityId').change(function () {
+            var url = '@Url.Content("~/")' + "Home/GetCenter";
+            var cityId = "#cityId";
+            /*alert("cityId = " + $(cityId).val())*/
+            $.getJSON(url, { CityId: $(cityId).val() }, function (data) {
+
+                var items = '';
+                $('#centerId').empty();
+                console.log(data);
+                $.each(data, function (i, center) {
+                    console.log(center);
+                    items += "<option value='" + center.Id + "'>" + center.Name + "</options>";
+                });
+                $('#centerId').html(items);
+            });
+        });
+
+        $('#centerId').change(function () {
+            
+        });
+
+        //var table = document.getElementById('table');
+        //var selected = table.getElementsByClassName('selected');
+        //table.onclick = highlight;
+
+        //function fnselect() {
+        //    var $row = $(this).parent().find('tr');
+        //    var clickedId = $row.eq(0).text();
+        //    alert(clickedId);
+        //}
+
+        //function highlight(e) {
+        //    if (selected[0]) selected[0].className = '';
+        //    e.target.parentNode.className = 'selected';
+        //}
+
+
+        //$('#submitTimeSlot').click(function () {
+        //    var value = $(".selected tr").html();
+        //    value = value || "No row selected";
+        //    alert(value);
+        //});             
+
+        
+
+        //$('#timeSlotsTable tbody tr').click(function () {
+        //    $(this).addClass('selected').siblings().removeClass('selected');
+        //    var value = $(this).find('.selected td').html();
+        //    alert(value); 
+        //});
+
+        //$('.ok').on('click', function (e) {
+        //    alert($("#timeSlotsTable tbody.selected tr.selected").html());
+        //});
+
+        $("#submitTimeSlot").click(function () {
+            var ele = document.getElementsByName('slots');
+            for (i = 0; i < ele.length; i++) {
+                if (ele[i].checked) {
+                    var id = ele[i].value;
+                }
+            }
+
+           // alert(id);
+            $.ajax({
+                url: '@Url.Action("CreateAndInsertBooking", "Home")',
+                data: { timeSlotId: id },
+                type: 'POST',
+                @if (ViewBag.Message == null)
+                {
+                    
+                }
+                success: function (result) {
+                    console.log(result);
+                }
+            });
+        });
+
+    });
+    </script>
+
+    <script>
+        
+    </script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#datepicker").datepicker({
+                onSelect: function (dateText, inst) {
+                    var url = '@Url.Content("~/")' + "Home/GetTimeSlot";
+                    var chosenDate = dateText;
+                   
+                    var centerId = '#centerId';
+                    
+                    var fullString = 'date = ' + chosenDate + ', centerId = ' + $(centerId).val();
+                    // alert(fullString);
+                    console.log(fullString);
+
+                    $.getJSON(url, { CenterId: $(centerId).val(), ChosenDate: chosenDate }, function (data) {
+                        var items = '<table><tr><th>Slot Date and Time</th></tr>';
+                        console.log(data);
+                        $.each(data, function (i, timeSlot) {
+                            console.log(timeSlot);
+                            var dateStr = timeSlot.SlotDateTime;
+                            console.log(dateStr);
+                            var a = dateStr.split("T");
+                            var d = a[0].split("-");
+                            var t = a[1].split(":");
+                            var formattedDate = new Date(d[0], (d[1] - 1), d[2], t[0], t[1], t[2]);
+                            
+                            items += '<tr><td><input type="radio" name="slots" value="' + timeSlot.Id + '" />' + formattedDate + '</td></tr>';
+                        });
+                        items += '</table>';
+                        console.log("*********ITEMS************: \n" + items);
+                        $('#table').html(items);
+                    });
+
+                    
+                }
+            });
+        });
+    </script>
+
+@*<script>
+    $(function () {
+        $('#datepicker').datepicker({
+            
+        });
+    });
+</script>*@
+
+
+}

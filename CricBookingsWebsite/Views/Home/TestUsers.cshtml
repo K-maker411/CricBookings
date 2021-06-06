@@ -1,0 +1,56 @@
+﻿@model IEnumerable<CricBookingsWebsite.Models.TestUser>
+@{
+    ViewData["Title"] = "TestUsers";
+}
+
+<h1>Test Users</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { }) |
+                    @Html.ActionLink("Details", "Details", new { }) |
+                    @Html.ActionLink("Delete", "Delete", new { })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Claim Details</h2>
+<ul>
+    @foreach (var claim in User.Claims)
+    {
+        <li><strong>@claim.Type</strong>: @claim.Value</li>
+    }
+</ul>

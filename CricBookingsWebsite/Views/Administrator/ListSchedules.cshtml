@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Schedule>
+
+@{
+    ViewBag.Title = "List Schedules";
+}
+
+<h1>All Schedules For This Center</h1>
+
+@if (Model.Any())
+{
+    foreach (var schedule in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                Center Id: @schedule.CenterId
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Schedule Id: @schedule.Id</h5>
+                <h5 class="card-title">Day Of The Week: @convertDayNumToString(schedule.DayOfWeek)</h5>
+                <h5 class="card-title">Starting Time: @getFormattedTime(schedule.StartTime)</h5>
+                <h5 class="card-title">Ending Time: @getFormattedTime(schedule.EndTime)</h5>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-primary" asp-action="EditSchedule" asp-controller="Administrator" asp-route-id="@schedule.Id">Edit</a>
+        </div>
+        
+    }
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No centers created yet
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                Use the button below to create a center
+            </h5>
+            <a class="btn btn-primary" style="width:auto" asp-controller="Administrator" asp-action="CreateCenter">
+                Create Center
+            </a>
+        </div>
+    </div>
+}
+
+
+@functions
+{
+    public string convertDayNumToString(int dayNum)
+    {
+        string[] dayArray = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+        string dayString = dayArray[dayNum];
+        return dayString;
+    }
+
+    public string getFormattedTime(int timeInMins)
+    {
+        int hours = timeInMins / 60;
+        int mins = timeInMins % 60;
+        DateTime date = new DateTime(2020, 12, 26, hours, mins, 0);
+        string formattedTime = date.ToString("t", System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
+        return formattedTime;
+    }
+}
